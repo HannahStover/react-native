@@ -168,8 +168,12 @@ class DishDetail extends Component {
               <Button
                 style={styles.modalButton}
                 onPress={() => {
-                  this.resetForm();
-                  this.handleComment();
+                  this.handleComment(
+                    dishId,
+                    this.state.rating,
+                    this.state.author,
+                    this.state.comment
+                  );
                 }}
                 color="#512DA8"
                 title="Submit"
