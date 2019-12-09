@@ -28,31 +28,6 @@ import {
   fetchLeaders
 } from "../redux/ActionCreators";
 
-const ReservationNavigator = createStackNavigator(
-  {
-    Reservation: { screen: Reservation }
-  },
-  {
-    navigationOptions: ({ navigation }) => ({
-      headerStyle: {
-        backgroundColor: "#512DA8"
-      },
-      headerTitleStyle: {
-        color: "#fff"
-      },
-      headerTintColor: "#fff",
-      headerLeft: (
-        <Icon
-          name="menu"
-          size={24}
-          color="white"
-          onPress={() => navigation.toggleDrawer()}
-        />
-      )
-    })
-  }
-);
-
 const mapStateToProps = state => {
   return {
     dishes: state.dishes,
@@ -197,6 +172,31 @@ const CustomDrawerContentComponent = props => (
       <DrawerItems {...props} />
     </SafeAreaView>
   </ScrollView>
+);
+
+const ReservationNavigator = createStackNavigator(
+  {
+    Reservation: { screen: Reservation }
+  },
+  {
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: "#512DA8"
+      },
+      headerTitleStyle: {
+        color: "#fff"
+      },
+      headerTintColor: "#fff",
+      headerLeft: (
+        <Icon
+          name="menu"
+          size={24}
+          color="white"
+          onPress={() => navigation.toggleDrawer()}
+        />
+      )
+    })
+  }
 );
 
 const MainNavigator = createDrawerNavigator(

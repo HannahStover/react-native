@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text } from "react-native";
-import { Card } from "react-native-elements";
+import { Card, Input } from "react-native-elements";
 
 const RenderCard = props => {
   return (

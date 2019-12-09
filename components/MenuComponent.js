@@ -17,9 +17,16 @@ class Menu extends Component {
   };
 
   render() {
+    if (this.props.dishes.isLoading) {
+      return <Loading />;
+    } else if (this.props.dishes.errMess) {
+      return <Text>{this.props.dishes.errMess}</Text>;
+    }
+    const { navigate } = this.props.navigation;
     const renderMenuItem = ({ item, index }) => {
       return (
         <Tile
+          key={index}
           title={item.name}
           caption={item.description}
           feature
@@ -28,26 +35,13 @@ class Menu extends Component {
         />
       );
     };
-
-    const { navigate } = this.props.navigation;
-
-    if (this.props.dishes.isLoading) {
-      return <Loading />;
-    } else if (this.props.dishes.errMess) {
-      return (
-        <View>
-          <Text>{this.props.dishes.errMess}</Text>
-        </View>
-      );
-    } else {
-      return (
-        <FlatList
-          data={this.props.dishes.dishes}
-          renderItem={renderMenuItem}
-          keyExtractor={item => item.id.toString()}
-        />
-      );
-    }
+    return (
+      <FlatList
+        data={this.props.dishes.dishes}
+        renderItem={renderMenuItem}
+        keyExtractor={item => item.id.toString()}
+      />
+    );
   }
 }
 
