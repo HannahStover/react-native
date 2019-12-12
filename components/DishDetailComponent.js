@@ -124,17 +124,21 @@ function RenderDish(props) {
 function RenderComments(props) {
   const comments = props.comments;
 
-  const renderCommentItem = ({ item, index }) => {
-    return (
-      <View key={index} style={{ margin: 10 }}>
-        <Text style={{ fontSize: 14 }}>{item.comment}</Text>
-        <Rating imageSize={12}>{item.rating} Stars</Rating>
-        <Text style={{ fontSize: 12 }}>
-          {"--" + item.author + ", " + item.date}
-        </Text>
-      </View>
-    );
-  };
+  const renderCommentItem = ({ item, index }) => (
+    <View key={index} style={{ margin: 10 }}>
+      <Text style={{ fontSize: 14 }}>{item.comment}</Text>
+      <Rating
+        type="star"
+        readonly
+        startingValue={+item.rating}
+        imageSize={10}
+        style={{ alignItems: "flex-start", paddingVeritcal: "5%" }}
+      />
+      <Text style={{ fontSize: 12 }}>
+        {"--" + item.author + ", " + item.date}
+      </Text>
+    </View>
+  );
   return (
     <Animatable.View animation="fadeInUp" duration={2000} delay={1000}>
       <Card title="Comments">
@@ -154,10 +158,11 @@ class DishDetail extends Component {
   };
 
   state = {
-    showModal: false,
+    favorites: [],
     rating: 5,
     author: "",
-    comment: ""
+    comment: "",
+    showModal: false
   };
 
   markFavorite(dishId) {
@@ -168,18 +173,23 @@ class DishDetail extends Component {
     this.setState({ showModal: !this.state.showModal });
   }
 
-  resetForm() {
+  resetForm = () => {
     this.setState({
       rating: 5,
       author: "",
-      comment: "",
-      showModal: false
+      comment: ""
     });
-  }
+  };
 
-  handleComment(dishId, rating, author, comment) {
-    this.props.postComment(dishId, rating, author, comment);
+  handleComment(dishId) {
+    this.props.postComment(
+      dishId,
+      this.state.rating,
+      this.state.author,
+      this.state.comment
+    );
     this.toggleModal();
+    this.resetForm();
   }
 
   render() {
@@ -201,49 +211,46 @@ class DishDetail extends Component {
           animationType={"slide"}
           transparent={false}
           visible={this.state.showModal}
+          onDismiss={() => this.toggleModal}
           onRequestClose={() => this.toggleModal()}
         >
           <View style={styles.modal} style={{ flex: 1 }}>
             <Rating
               showRating
               type="star"
+              fractions={0}
               startingValue={this.state.rating}
+              imageSize={40}
               style={{ paddingVertical: 10 }}
-              defaultRating={5}
               onFinishRating={rating => this.setState({ rating: rating })}
             />
             <Input
               placeholder="Author"
               leftIcon={{ type: "font-awesome", name: "user-o" }}
-              leftIconContainerStyle={{ paddingEnd: 8 }}
+              leftIconContainerStyle={{ marginRight: 10 }}
               onChangeText={author => this.setState({ author: author })}
-            ></Input>
+              value={this.state.author}
+            />
             <Input
               placeholder="Comment"
               leftIcon={{ type: "font-awesome", name: "comment-o" }}
-              leftIconContainerStyle={{ paddingEnd: 8 }}
+              leftIconContainerStyle={{ marginRight: 10 }}
               onChangeText={comment => this.setState({ comment: comment })}
-            ></Input>
-            <View style={{ margin: 10 }}>
+              value={this.state.comment}
+            />
+            <View style={styles.modalButton}>
               <Button
-                style={styles.modalButton}
                 onPress={() => {
-                  this.handleComment(
-                    dishId,
-                    this.state.rating,
-                    this.state.author,
-                    this.state.comment
-                  );
+                  this.handleComment(dishId);
                 }}
                 color="#512DA8"
                 title="Submit"
               />
             </View>
-            <View style={{ margin: 10 }}>
+            <View style={styles.modalButton}>
               <Button
-                style={styles.modalButton}
                 onPress={() => {
-                  this.state.showModal;
+                  this.toggleModal();
                   this.resetForm();
                 }}
                 color="grey"
@@ -258,13 +265,6 @@ class DishDetail extends Component {
 }
 
 const styles = StyleSheet.create({
-  cardRow: {
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-    flexDirection: "row",
-    margin: 20
-  },
   formLabel: {
     fontSize: 18,
     flex: 2
@@ -286,8 +286,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   modalButton: {
-    fontSize: 18,
-    margin: 20
+    marginTop: 20
   }
 });
 
