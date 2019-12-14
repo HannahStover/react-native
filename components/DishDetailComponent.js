@@ -41,6 +41,11 @@ function RenderDish(props) {
     else return false;
   };
 
+  const recognizeComment = ({ moveX, moveY, dx, dy }) => {
+    if (dx > 200) return true;
+    else return false;
+  };
+
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: (e, gestureState) => {
       return true;
@@ -75,6 +80,8 @@ function RenderDish(props) {
           ],
           { cancelable: false }
         );
+      else if (recognizeComment(gestureState)) props.onShowModal();
+
       return true;
     }
   });
@@ -132,7 +139,7 @@ function RenderComments(props) {
         readonly
         startingValue={+item.rating}
         imageSize={10}
-        style={{ alignItems: "flex-start", paddingVeritcal: "5%" }}
+        style={{ alignItems: "flex-start", paddingVertical: "5%" }}
       />
       <Text style={{ fontSize: 12 }}>
         {"--" + item.author + ", " + item.date}
@@ -265,6 +272,17 @@ class DishDetail extends Component {
 }
 
 const styles = StyleSheet.create({
+  cardRow: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    flexDirection: "row",
+    margin: 20
+  },
+  cardItem: {
+    flex: 1,
+    margin: 10
+  },
   formLabel: {
     fontSize: 18,
     flex: 2
@@ -286,7 +304,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   modalButton: {
-    marginTop: 20
+    margin: 20
   }
 });
 
