@@ -4,6 +4,28 @@ import { Card, Button, Icon } from "react-native-elements";
 import * as Animatable from "react-native-animatable";
 import * as MailComposer from "expo-mail-composer";
 
+class Contact extends Component {
+  sendMail() {
+    MailComposer.composeAsync({
+      recipients: ["confusion@food.net"],
+      subject: "Enquiry",
+      body: "To whom it may concern:"
+    });
+  }
+
+  static navigationOptions = {
+    title: "Contact Us"
+  };
+
+  render() {
+    return (
+      <View>
+        <RenderCard />
+      </View>
+    );
+  }
+}
+
 const RenderCard = props => {
   return (
     <ScrollView>
@@ -26,27 +48,5 @@ const RenderCard = props => {
     </ScrollView>
   );
 };
-
-class Contact extends Component {
-  sendMail() {
-    MailComposer.composeAsync({
-      recipients: ["confusion@food.net"],
-      subject: "Enquiry",
-      body: "To whom it may concern:"
-    });
-  }
-
-  static navigationOptions = {
-    title: "Contact Us"
-  };
-
-  render() {
-    return (
-      <View>
-        <RenderCard />
-      </View>
-    );
-  }
-}
 
 export default Contact;
