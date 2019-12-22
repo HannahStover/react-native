@@ -95,6 +95,7 @@ class LoginTab extends Component {
           <Button
             onPress={() => this.handleLogin()}
             title="Login"
+            color="#512DA8"
             icon={
               <Icon
                 name="sign-in"
@@ -108,9 +109,6 @@ class LoginTab extends Component {
             }}
           />
         </View>
-
-        {/* the following view is not showing up, I'm not sure why */}
-
         <View style={styles.formButton}>
           <Button
             onPress={() => this.props.navigation.navigate("Register")}
@@ -121,12 +119,12 @@ class LoginTab extends Component {
                 name="user-plus"
                 type="font-awesome"
                 size={24}
-                color="blue"
+                color="#512DA8"
               />
             }
-            titleStyle={{
-              color: "blue"
-            }}
+            // titleStyle={{
+            //   color: "#512DA8"
+            // }}
           />
         </View>
       </View>
@@ -167,6 +165,20 @@ class RegisterTab extends Component {
         console.log(capturedImage);
         this.processImage(capturedImage.uri);
       }
+    }
+  };
+
+  getImageFromGallery = async () => {
+    let imageGallery = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
+    });
+    console.log(imageGallery);
+
+    if (!imageGallery.cancelled) {
+      this.processImage(imageGallery.uri);
     }
   };
 
@@ -215,6 +227,7 @@ class RegisterTab extends Component {
               style={styles.image}
             />
             <Button title="Camera" onPress={this.getImageFromCamera} />
+            <Button title="Gallery" onPress={this.getImageFromGallery} />
           </View>
           <Input
             placeholder="Username"
@@ -267,6 +280,7 @@ class RegisterTab extends Component {
             <Button
               onPress={() => this.handleRegister()}
               title="Register"
+              color="#512DA8"
               icon={
                 <Icon
                   name="user-plus"
@@ -288,13 +302,14 @@ class RegisterTab extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    margin: 20
+    flex: 1,
+    margin: 10
   },
   imageContainer: {
     flex: 1,
     flexDirection: "row",
-    margin: 20
+    margin: 10,
+    justifyContent: "space-between"
   },
   image: {
     margin: 10,
@@ -302,14 +317,14 @@ const styles = StyleSheet.create({
     height: 60
   },
   formInput: {
-    margin: 40
+    marginVertical: 20
   },
   formCheckbox: {
-    margin: 40,
+    margin: 20,
     backgroundColor: null
   },
   formButton: {
-    margin: 60
+    margin: 20
   }
 });
 

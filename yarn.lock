@@ -1997,6 +1997,11 @@ expo-asset@~7.0.0:
     path-browserify "^1.0.0"
     url-parse "^1.4.4"
 
+expo-calendar@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/expo-calendar/-/expo-calendar-7.0.0.tgz#6155c94b38dcd340ff09ea0ef1337442b3439a82"
+  integrity sha512-1lufM24VJpJZs1PIdduR1YGxY1Fn/LxyQKWOc6gSJ/tGXh2dctBQHecRsxPqpUNjj9HD2uyOidCWjQ6Huz7G8Q==
+
 expo-constants@~7.0.0:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-7.0.1.tgz#87be02b6dae5c44a3246537452a0d77af15d46bf"
@@ -2018,10 +2023,10 @@ expo-font@~7.0.0:
   dependencies:
     fontfaceobserver "^2.1.0"
 
-expo-image-manipulator@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/expo-image-manipulator/-/expo-image-manipulator-8.0.0.tgz#d7a8ba836a417f7fd1f07db5cde4eb7c0611d608"
-  integrity sha512-7KaQca4szyNllM30ZAnyL7ww83/YJFDl4Yr/4/WglXAKas96WOBztsF7/CPrboEVh/LzfqtSFW0PtyYgrC2o9Q==
+expo-image-manipulator@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/expo-image-manipulator/-/expo-image-manipulator-7.0.0.tgz#2306213b30e306e87ddb02f15e35c4f1f4d36a12"
+  integrity sha512-N6DV6QQ4fwppRgntXTk2zydyuSBkpkJCbU/VWohhhP26Pp2Z6ay0OfXz08OdQN2UEStAisx+W1St7cWqwq7tjA==
 
 expo-image-picker@7.0.0:
   version "7.0.0"

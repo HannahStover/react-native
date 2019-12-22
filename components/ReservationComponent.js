@@ -1,4 +1,4 @@
-import React, { Component, useCallback } from "react";
+import React, { Component } from "react";
 import {
   Text,
   View,
@@ -13,6 +13,7 @@ import DatePicker from "react-native-datepicker";
 import * as Animatable from "react-native-animatable";
 import * as Permissions from "expo-permissions";
 import { Notifications } from "expo";
+import * as Calendar from "expo-calendar";
 
 class Reservation extends Component {
   constructor(props) {
@@ -21,8 +22,7 @@ class Reservation extends Component {
     this.state = {
       guests: 1,
       smoking: false,
-      date: "",
-      showModal: false
+      date: ""
     };
   }
 
@@ -30,42 +30,36 @@ class Reservation extends Component {
     title: "Reserve Table"
   };
 
-  toggleModal() {
-    this.setState({ showModal: !this.state.showModal });
-  }
+  obtainCalendarPermission = async () => {
+    let calPermission = await Permissions.getAsync(Permissions.CALENDAR);
+    if (calPermission.status !== "granted") {
+      calPermission = await Permissions.askAsync(Permissions.CALENDAR);
+      if (calPermission.status !== "granted") {
+        Alert.alert("Permission not granted to show calendar");
+      }
+    }
 
-  handleReservation = () => {
-    Alert.alert(
-      "Your Reservation OK?",
-      `Number of Guests: ${this.state.guests}\nSmoking? ${this.state.smoking}\nDate and Time: ${this.state.date}`,
-
-      [
-        {
-          text: "Cancel",
-          onPress: () => {
-            console.log("Reservation Canceled");
-            this.resetForm();
-          },
-          style: "cancel"
-        },
-        {
-          text: "OK",
-          onPress: () => this.presentLocalNotification(this.state.date),
-          [useCallback]: this.resetForm()
-        }
-      ],
-      { cancelable: false }
-    );
+    console.log(calPermission);
+    return calPermission;
   };
 
-  resetForm() {
-    this.setState({
-      guests: 1,
-      smoking: false,
-      date: "",
-      showModal: false
+  addReservationToCalendar = async date => {
+    await this.obtainCalendarPermission();
+
+    const reserveDate = new Date(Date.parse(date));
+    const reserveEndDate = new Date(Date.parse(date) + 1000 * 60 * 60 * 2);
+
+    const listCalendars = await Calendar.getCalendarsAsync();
+    console.log("list of calendars: ", listCalendars);
+
+    await Calendar.createEventAsync("1", {
+      title: "Con Fusion Table Restaurant",
+      startDate: reserveDate,
+      endDate: reserveEndDate,
+      timeZone: "Asia/Hong_Kong",
+      location: "121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong"
     });
-  }
+  };
 
   async obtainNotificationPermission() {
     let permission = await Permissions.getAsync(
@@ -98,6 +92,41 @@ class Reservation extends Component {
     });
   }
 
+  resetForm() {
+    this.setState({
+      guests: 1,
+      smoking: false,
+      date: ""
+    });
+  }
+
+  handleReservation = () => {
+    Alert.alert(
+      "Your Reservation OK?",
+      `Number of Guests: ${this.state.guests}\nSmoking? ${this.state.smoking}\nDate and Time: ${this.state.date}`,
+
+      [
+        {
+          text: "Cancel",
+          onPress: () => {
+            console.log("Reservation Cancelled");
+            this.resetForm();
+          },
+          style: "cancel"
+        },
+        {
+          text: "OK",
+          onPress: async () => {
+            this.presentLocalNotification(this.state.date);
+            this.addReservationToCalendar(this.state.date);
+            this.resetForm();
+          }
+        }
+      ],
+      { cancelable: false }
+    );
+  };
+
   render() {
     return (
       <ScrollView>
@@ -107,9 +136,7 @@ class Reservation extends Component {
             <Picker
               style={styles.formItem}
               selectedValue={this.state.guests}
-              onValueChange={(itemValue, itemIndex) =>
-                this.setState({ guests: itemValue })
-              }
+              onValueChange={itemValue => this.setState({ guests: itemValue })}
             >
               <Picker.Item label="1" value="1" />
               <Picker.Item label="2" value="2" />
@@ -158,7 +185,7 @@ class Reservation extends Component {
           <View style={styles.button}>
             <Button
               title="Reserve"
-              onPress={this.handleReservation}
+              onPress={() => this.handleReservation()}
               color="#512DA8"
               accessibilityLabel="Learn more about this purple button"
             />
